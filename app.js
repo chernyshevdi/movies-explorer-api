@@ -9,7 +9,7 @@ const userRouter = require('./routes/users');
 const moviesRouter = require('./routes/movies');
 const { login, createUser, logout } = require('./controllers/users');
 const auth = require('./middlewares/auth');
-const {createUserValidity, loginValidity,} = require('./middlewares/validity');
+const { createUserValidity, loginValidity } = require('./middlewares/validity');
 const NotFoundError = require('./utils/errors/notFound');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');

@@ -23,7 +23,7 @@ const loginValidity = celebrate({
     password: Joi.string().required().min(8),
   }),
 });
-/////////////////////
+/// //////////////////
 const createMovieValidity = celebrate({
   body: Joi.object().keys({
     country: Joi.string().required(),

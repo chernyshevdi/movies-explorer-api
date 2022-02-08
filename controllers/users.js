@@ -4,6 +4,7 @@ const User = require('../models/user');
 const NotFoundError = require('../utils/errors/notFound');
 const BadRequestError = require('../utils/errors/badRequest');
 const ConflictError = require('../utils/errors/conflict');
+
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getUserInfo = (req, res, next) => {
@@ -12,7 +13,7 @@ module.exports.getUserInfo = (req, res, next) => {
       throw new NotFoundError('Запрашиваемый пользователь не найден');
     })
     .then((user) => {
-      res.send({user}); // email and name
+      res.send({ user }); // email and name
     })
     .catch(next);
 };
@@ -31,8 +32,7 @@ module.exports.updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Некорректные данные пользователя');
-      }
-      else if(err.message === 'Запрашиваемый пользователь не найден') {
+      } else if (err.message === 'Запрашиваемый пользователь не найден') {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       }
     })
@@ -56,11 +56,11 @@ module.exports.login = (req, res, next) => {
 module.exports.logout = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
-  .then(() => {
-    res.status(202).clearCookie('token').send('cookie cleared')
-  })
-  .catch(next)
-}
+    .then(() => {
+      res.status(202).clearCookie('token').send('cookie cleared');
+    })
+    .catch(next);
+};
 
 module.exports.createUser = (req, res, next) => {
   const {
@@ -73,7 +73,8 @@ module.exports.createUser = (req, res, next) => {
       password: hash,
     }))
     .then(() => {
-      res.send({ data: {name, email} })})
+      res.send({ data: { name, email } });
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Некорректные данные пользователя');

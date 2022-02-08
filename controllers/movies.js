@@ -10,11 +10,25 @@ module.exports.getMovies = (req, res, next) => {
 };
 
 module.exports.createMovie = (req, res, next) => {
-  const { country, director, duration, year, description,
-    image, trailerLink, nameRU, nameEN, thumbnail, movieId } = req.body;
+  const {
+    country, director, duration, year, description,
+    image, trailerLink, nameRU, nameEN, thumbnail, movieId,
+  } = req.body;
   const owner = req.user._id;
-  Movie.create({ country, director, duration, year, description,
-     image, trailerLink, nameRU, nameEN, thumbnail, movieId, owner })
+  Movie.create({
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailerLink,
+    nameRU,
+    nameEN,
+    thumbnail,
+    movieId,
+    owner,
+  })
     .then((movie) => res.send({ data: movie }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -32,7 +46,7 @@ module.exports.deleteMovie = (req, res, next) => {
     .then((movie) => {
       if (req.user._id === movie.owner.toString()) {
         Movie.findByIdAndRemove(req.params._id)
-        .then((res) => {res.status(200).send({data: movie})})
+          .then((result) => { result.status(200).send({ data: movie }); });
       } else {
         throw new ForbiddenError('Нельзя удалить фильм другого пользователя');
       }
@@ -40,11 +54,9 @@ module.exports.deleteMovie = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         throw new BadRequestError('Некорректные данные');
-      }
-      else if(err.message === 'Запрашиваемый фильм не найден') {
+      } else if (err.message === 'Запрашиваемый фильм не найден') {
         throw new NotFoundError('Запрашиваемый фильм не найден');
-      }
-      else if(err.message === 'Нельзя удалить фильм другого пользователя') {
+      } else if (err.message === 'Нельзя удалить фильм другого пользователя') {
         throw new ForbiddenError('Нельзя удалить фильм другого пользователя');
       }
     })
