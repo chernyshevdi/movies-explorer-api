@@ -41,16 +41,16 @@ module.exports.updateUser = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-  return User.findUserByCredentials(email, password)
+  User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-      res.cookie('token', token, {
+      return res.cookie('token', token, {
         maxAge: 3600000 * 24 * 7,
         httpOnly: true,
         sameSite: 'None',
         secure: true,
       })
-        .send({ message: 'Авторизация прошла успешно' });
+        .send({ message: 'Авторизация прошла успешно', token });
     })
     .catch(next);
 };
