@@ -20,7 +20,6 @@ module.exports.getUserInfo = (req, res, next) => {
 module.exports.updateUser = (req, res, next) => {
   const owner = req.user._id;
   const { name, email } = req.body;
-  // обновим имя найденного по _id пользователя
   User.findByIdAndUpdate(owner, { name, email }, { new: true, runValidators: true })
     .then((user) => {
       if (!user) {
@@ -60,7 +59,7 @@ module.exports.logout = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
   .then(() => {
-    res.status(202).clearCookie('jwt').send('cookie cleared')
+    res.status(202).clearCookie('token').send('cookie cleared')
   })
   .catch(next)
 }
