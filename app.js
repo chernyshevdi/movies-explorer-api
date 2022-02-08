@@ -1,4 +1,4 @@
-require('dotenv').config(); 
+require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
@@ -36,6 +36,7 @@ app.use(errorLogger);
 app.use(errors());
 
 app.use((err, req, res, next) => {
+  console.log(err.message)
   const statusCode = err.statusCode || 500;
   const message = statusCode === 500 ? 'Ошибка сервера' : err.message;
   res
