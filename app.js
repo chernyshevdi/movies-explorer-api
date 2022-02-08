@@ -17,15 +17,16 @@ const { cors } = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
+console.log(process.env.NODE_ENV);
 app.use(helmet());
 app.use(bodyParser.json()); // для собирания JSON-формата
 app.use(bodyParser.urlencoded({ extended: true })); // для приёма веб-страниц внутри POST-запроса
 app.use(cookieParser());
 app.use(requestLogger);
 app.use(cors);
+app.get('/signout', logout);
 app.post('/signin', loginValidity, login); // удалять JWT из куки.
 app.post('/signup', createUserValidity, createUser);
-app.get('/signout', logout);
 app.use(auth);
 app.use(userRouter);
 app.use(moviesRouter);
