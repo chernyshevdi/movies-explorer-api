@@ -8,6 +8,7 @@ const ConflictError = require('../utils/errors/conflict');
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getUserInfo = (req, res, next) => {
+  const { name, email } = req.body;
   User.findById(req.user._id)
     .orFail(() => {
       throw new NotFoundError('Запрашиваемый пользователь не найден');
@@ -26,7 +27,7 @@ module.exports.updateUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       } else {
-        res.send({ user: name, email }); //check
+        res.send({ user: name, email });
       }
     })
     .catch((err) => {

@@ -4,8 +4,11 @@ const BadRequestError = require('../utils/errors/badRequest');
 const ForbiddenError = require('../utils/errors/forbidden');
 
 module.exports.getMovies = (req, res, next) => {
-  Movie.find({})
-    .then((movies) => res.send({ data: movies }))
+  const owner = req.user._id;
+  Movie.findById(owner) //check
+    .then((movies) => {
+      res.send({ data: movies })
+    })
     .catch(next);
 };
 
@@ -46,7 +49,11 @@ module.exports.deleteMovie = (req, res, next) => {
     .then((movie) => {
       if (req.user._id === movie.owner.toString()) {
         Movie.findByIdAndRemove(req.params._id)
-          .then((result) => { result.status(200).send({ data: movie }); });
+          .then((result) => {
+            if(result) {
+              result.send({ data: movie }); //check
+            }
+          });
       } else {
         throw new ForbiddenError('Нельзя удалить фильм другого пользователя');
       }
