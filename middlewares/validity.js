@@ -32,19 +32,19 @@ const createMovieValidity = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required().pattern(linkValidity).custom((value, helpers) => {
+    image: Joi.string().required().custom((value, helpers) => {
       if(isURL(value)) {
         return value;
       }
       return helpers.message('Неправильно заполнено поле image');
     }),
-    trailerLink: Joi.string().required().pattern(linkValidity).custom((value, helpers) => {
+    trailerLink: Joi.string().required().custom((value, helpers) => {
       if(isURL(value)) {
         return value;
       }
       return helpers.message('Неправильно заполнено поле trailerLink');
     }),
-    thumbnail: Joi.string().required().pattern(linkValidity).custom((value, helpers) => {
+    thumbnail: Joi.string().required().custom((value, helpers) => {
       if(isURL(value)) {
         return value;
       }
