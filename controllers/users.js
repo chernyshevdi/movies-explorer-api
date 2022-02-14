@@ -8,13 +8,12 @@ const ConflictError = require('../utils/errors/conflict');
 const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getUserInfo = (req, res, next) => {
-  const { name, email } = req.body;
   User.findById(req.user._id)
     .orFail(() => {
       throw new NotFoundError('Запрашиваемый пользователь не найден');
     })
-    .then(() => {
-      res.send({ user: {name, email} }); // email and name
+    .then((user) => {
+      res.send({ name: user.name, email: user.email }); // email and name
     })
     .catch(next);
 };
