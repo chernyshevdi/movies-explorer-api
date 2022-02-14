@@ -33,19 +33,19 @@ const createMovieValidity = celebrate({
     year: Joi.string().required(),
     description: Joi.string().required(),
     image: Joi.string().required().pattern(linkValidity).custom((value, helpers) => {
-      if(validator.isURL(value)) {
+      if(isURL(value)) {
         return value;
       }
       return helpers.message('Неправильно заполнено поле image');
     }),
     trailerLink: Joi.string().required().pattern(linkValidity).custom((value, helpers) => {
-      if(validator.isURL(value)) {
+      if(isURL(value)) {
         return value;
       }
       return helpers.message('Неправильно заполнено поле trailerLink');
     }),
     thumbnail: Joi.string().required().pattern(linkValidity).custom((value, helpers) => {
-      if(validator.isURL(value)) {
+      if(isURL(value)) {
         return value;
       }
       return helpers.message('Неправильно заполнено поле thumbnail');
