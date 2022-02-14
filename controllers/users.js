@@ -12,8 +12,8 @@ module.exports.getUserInfo = (req, res, next) => {
     .orFail(() => {
       throw new NotFoundError('Запрашиваемый пользователь не найден');
     })
-    .then((user) => {
-      res.send({ user }); // email and name
+    .then(() => {
+      res.send({ user: {name, email} }); // email and name
     })
     .catch(next);
 };
@@ -26,7 +26,7 @@ module.exports.updateUser = (req, res, next) => {
       if (!user) {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
       } else {
-        res.send({ data: user });
+        res.send({ user: name, email }); //check
       }
     })
     .catch((err) => {
