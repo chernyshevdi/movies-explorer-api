@@ -50,7 +50,7 @@ module.exports.deleteMovie = (req, res, next) => {
         Movie.findByIdAndRemove(req.params._id)
           .then((result) => {
             if(result) {
-              result.send({ movie }); //check
+              res.send({ movie }); //check
             }
           });
       } else {
