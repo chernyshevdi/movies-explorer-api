@@ -1,4 +1,5 @@
 const { celebrate, Joi } = require('celebrate');
+const { isURL } = require('validator');
 
 const linkValidity = /^https?:\/\/(w{3}\.)*[a-z0-9-][-._~:/?[\]#@!$&'()*+,;=]*#?/;
 
@@ -11,7 +12,7 @@ const updateUserValidity = celebrate({
 
 const createUserValidity = celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().min(2).required().max(30),
     email: Joi.string().required().email(),
     password: Joi.string().required().min(8),
   }),
@@ -31,12 +32,28 @@ const createMovieValidity = celebrate({
     duration: Joi.number().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required().pattern(linkValidity),
-    trailerLink: Joi.string().required().pattern(linkValidity),
-    thumbnail: Joi.string().required().pattern(linkValidity),
+    image: Joi.string().required().pattern(linkValidity).custom((value, helpers) => {
+      if(validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Неправильно заполнено поле image');
+    }),
+    trailerLink: Joi.string().required().pattern(linkValidity).custom((value, helpers) => {
+      if(validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Неправильно заполнено поле trailerLink');
+    }),
+    thumbnail: Joi.string().required().pattern(linkValidity).custom((value, helpers) => {
+      if(validator.isURL(value)) {
+        return value;
+      }
+      return helpers.message('Неправильно заполнено поле thumbnail');
+    }),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
     movieId: Joi.number().required(),
+    _id: Joi.string().hex().length(24), //!!!
   }),
 });
 

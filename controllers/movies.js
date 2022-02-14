@@ -48,11 +48,9 @@ module.exports.deleteMovie = (req, res, next) => {
     })
     .then((movie) => {
       if (req.user._id === movie.owner.toString()) {
-        Movie.findByIdAndRemove(req.params._id)
-          .then((result) => {
-            if(result) {
+        return Movie.findByIdAndRemove(req.params._id)
+          .then(() => {
               res.send({ movie }); //check
-            }
           });
       } else {
         throw new ForbiddenError('Нельзя удалить фильм другого пользователя');
