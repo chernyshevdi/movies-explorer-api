@@ -36,6 +36,7 @@ module.exports.createMovie = (req, res, next) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Некорректные данные фильма');
       }
+      throw err;
     })
     .catch(next);
 };
@@ -65,6 +66,7 @@ module.exports.deleteMovie = (req, res, next) => {
       } else if (err.message === 'Нельзя удалить фильм другого пользователя') {
         throw new ForbiddenError('Нельзя удалить фильм другого пользователя');
       }
+      throw err;
     })
     .catch(next);
 };

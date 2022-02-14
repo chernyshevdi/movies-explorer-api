@@ -13,7 +13,7 @@ module.exports.getUserInfo = (req, res, next) => {
       throw new NotFoundError('Запрашиваемый пользователь не найден');
     })
     .then((user) => {
-      res.send({ name: user.name, email: user.email }); // email and name
+      res.send({ name: user.name, email: user.email });
     })
     .catch(next);
 };
@@ -34,7 +34,10 @@ module.exports.updateUser = (req, res, next) => {
         throw new BadRequestError('Некорректные данные пользователя');
       } else if (err.message === 'Запрашиваемый пользователь не найден') {
         throw new NotFoundError('Запрашиваемый пользователь не найден');
+      } else if (err.name === 'MongoServerError' && err.code === 11000) {
+        throw new ConflictError('Такой email занят');
       }
+      throw err;
     })
     .catch(next);
 };
@@ -81,6 +84,7 @@ module.exports.createUser = (req, res, next) => {
       } else if (err.name === 'MongoServerError' && err.code === 11000) {
         throw new ConflictError('Такой email уже зарегистрирован');
       }
+      throw err;
     })
     .catch(next);
 };
