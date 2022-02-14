@@ -4,11 +4,9 @@ const BadRequestError = require('../utils/errors/badRequest');
 const ForbiddenError = require('../utils/errors/forbidden');
 
 module.exports.getMovies = (req, res, next) => {
-  Movie.find({})
+  Movie.find({ owner: req.user._id })
     .then((movies) => {
-      if (req.user._id === movie.owner.toString()) { //check
-        res.send({ data: movies })
-      }
+        res.send({ movies })
     })
     .catch(next);
 };
@@ -33,7 +31,7 @@ module.exports.createMovie = (req, res, next) => {
     movieId,
     owner,
   })
-    .then((movie) => res.send({ data: movie }))
+    .then((movie) => res.send({ movie }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new BadRequestError('Некорректные данные фильма');
@@ -52,7 +50,7 @@ module.exports.deleteMovie = (req, res, next) => {
         Movie.findByIdAndRemove(req.params._id)
           .then((result) => {
             if(result) {
-              result.send({ data: movie }); //check
+              result.send({ movie }); //check
             }
           });
       } else {
