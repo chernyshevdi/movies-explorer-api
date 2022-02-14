@@ -7,9 +7,8 @@ const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
 const userRouter = require('./routes/users');
 const moviesRouter = require('./routes/movies');
-const { login, createUser, logout } = require('./controllers/users');
+const authRouter = require('./routes/auth');
 const auth = require('./middlewares/auth');
-const { createUserValidity, loginValidity } = require('./middlewares/validity');
 const NotFoundError = require('./utils/errors/notFound');
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -23,9 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(requestLogger);
 app.use(cors);
-app.get('/signout', logout);
-app.post('/signin', loginValidity, login);
-app.post('/signup', createUserValidity, createUser);
+app.use(authRouter)
 app.use(auth);
 app.use(userRouter);
 app.use(moviesRouter);
