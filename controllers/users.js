@@ -60,7 +60,7 @@ module.exports.logout = (req, res, next) => {
   const { email, password } = req.body;
   return User.findUserByCredentials(email, password)
     .then(() => {
-      res.status(202).clearCookie('token').send('cookie cleared');
+      res.clearCookie('token').send('cookie cleared');
     })
     .catch(next);
 };
